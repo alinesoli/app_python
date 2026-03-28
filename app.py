@@ -12,7 +12,7 @@ def get_db_connection():
 
 def init_db():
     conn = get_db_connection()
-    conn.execute('CREATE TABLE IF NOT EXISTS alunos (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL, curso Text Not Null)')
+    conn.execute('CREATE TABLE IF NOT EXISTS alunos (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL, curso TEXT NOT NULL)')
     conn.commit()
     conn.close()
 
@@ -30,8 +30,8 @@ def add_aluno():
     curso = request.form['curso']
     if nome and curso:
         conn = get_db_connection()
-        conn.execute('INSERT INTO alunos (nome, curso)\ VALUES(?, ?)', (nome, curso))
-        conn_commit()
+        conn.execute('INSERT INTO alunos (nome, curso) VALUES (?, ?)', (nome, curso))
+        conn.commit()
         conn.close()
     return redirect(url_for('index'))
 
@@ -39,23 +39,24 @@ def add_aluno():
 def delete_aluno(id):
     conn = get_db_connection
     conn.execute('DELETE FROM alunos WHERE id = ?', (id,))
-    conn_commit()
+    conn.commit()
     conn.close()
     return redirect(url_for('index'))
 
-## --- ROTA DE API (JSON) ---
-@app.route('/api/alunos', methods = ['GET'])
+# --- ROTA DE API (JSON) ---
+@app.route('/api/alunos', methods=['GET'])
 def get_alunos_json():
     conn = get_db_connection()
-    alunos = conn.execute ('SELECT * FROM alunos').fetchall()
+    alunos = conn.execute('SELECT * FROM alunos').fetchall()
     conn.close()
 
-# Transformar os objetos do banco de dados sqlite em uma lista de dicionários
+    # Transformar os objetos do banco de dados sqlite
+    # em uma lista de dicionários
     lista_alunos = [dict(aluno) for aluno in alunos]
     return jsonify(lista_alunos)
 
 # --- INICIALIZAÇÃO ---
 if __name__ == '__main__':
     init_db()
-    port =  int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
