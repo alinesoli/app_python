@@ -51,8 +51,8 @@ def get_alunos_json():
     conn.close()
 
 # Transformar os objetos do banco de dados sqlite em uma lista de dicionários
-lista_alunos = [dict(aluno) for aluno in alunos]
-return jsonify(lista_alunos)
+    lista_alunos = [dict(aluno) for aluno in alunos]
+    return jsonify(lista_alunos)
 
 # --- INICIALIZAÇÃO ---
 if __name__ == '__main__':
