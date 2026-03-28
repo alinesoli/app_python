@@ -17,7 +17,7 @@ def init_db():
     conn.close()
 
 # --- ROTAS DO SITE (HTML) ---
-@app.rout('/')
+@app.route('/')
 def index():
     conn = get_db_connection()
     alunos = conn.execute('SELECT * FROM alunos').fetchall()
